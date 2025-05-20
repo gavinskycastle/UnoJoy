@@ -22,6 +22,28 @@ void setupPins(void){
   }
 }
 
+int pinMapToDS(int i){
+  // Using this mapping, the pin number should correspond to the same numbered button.
+  // i.e. Pin 2 -> Button 2.
+  // This has the side effect of there being no intuitive input for button 1 since pin 1 is used for serial communication, however I think that's a fair tradeoff
+  // for simpler implementation.
+  switch(i) {
+    case 2: return 5;
+    case 3: return 3;
+    case 4: return 2;
+    case 5: return 6;
+    case 6: return 9;
+    case 7: return 7;
+    case 8: return 10;
+    case 9: return 12;
+    case 10: return 13;
+    case 11: return 8;
+    case 12: return 11;
+    case 13: return 14;
+    default: return i;
+  }
+}
+
 megaJoyControllerData_t getControllerData(void){
   
   // Set up a place for our controller data
@@ -34,7 +56,7 @@ megaJoyControllerData_t getControllerData(void){
   //  pulled low when pressed, we use the "!"
   //  operator to invert the readings from the pins
   for (int i = 2; i < 54; i++){
-    controllerData.buttonArray[(i - 2) / 8] |= (!digitalRead(i)) << ((i - 2) % 8);
+    controllerData.buttonArray[(pinMapToDS(i) - 2) / 8] |= (!digitalRead(i)) << ((pinMapToDS(i) - 2) % 8);
   }
   
   // Set the analog sticks
